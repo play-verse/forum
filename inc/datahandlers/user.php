@@ -119,6 +119,33 @@ class UserDataHandler extends DataHandler
 			return false;
 		}
 
+		// Cek SA-MP validasi nama
+		$panjang_uname = my_strlen($username);
+		$count_underscore = 0;
+
+		// Cek jika underscore ada diakhir atau diawal
+		if($username[0] == '_' || $username[$panjang_uname - 1] == '_'){
+			$this->set_error("bad_format_username");
+			return false;
+		}
+
+		for($posisi = 0; $posisi != my_strlen($username); $posisi++){
+			if (preg_match("/^[a-zA-Z]$/", $username[$posisi]))
+				continue;
+			else if ($username[$posisi] == '_')
+				$count_underscore++;
+			else {
+				$this->set_error("bad_format_username");
+				return false;
+			}
+		}
+
+		// Cek kalau memiliki lebih dari 1 underscore
+		if($count_underscore > 1){
+			$this->set_error("bad_format_username");
+			return false;
+		}
+
 		return true;
 	}
 
